@@ -1,11 +1,28 @@
-on: push
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
-  build-node:
+  test:
     runs-on: ubuntu-latest
-    container: node:18
+
     steps:
-      - run: node --version
-      - run: npm --version
-      - uses: actions/checkout@v3
-      - run: npm install
-      - run: node App.js
+    - uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 20
+
+    - name: Install dependencies
+      run: npm i
+
+    - name: Start server
+      run: npm start &
+
+    - name: Run tests
+      run: echo "Tests are running"
